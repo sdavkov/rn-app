@@ -1,19 +1,20 @@
 import React, { FC, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Platform, Alert, Button } from 'react-native';
+import {Text, View} from '../components/Themed';
 import * as Sharing from 'expo-sharing';
 import { ShareContext } from '../ShareContext';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import { Routs } from '../constants';
+import Routs from '../constants/constants';
 
-type Props = NativeStackScreenProps<ParamListBase, Routs.share>;
+type Props = NativeStackScreenProps<ParamListBase, typeof Routs.SHARE>;
 
 const ShareScreen = ({ navigation }: Props) => {
 	const { selectedImage, setSelectedImage } = useContext(ShareContext);
 
 	const openShareDialogAsunc = async () => {
 		if (Platform.OS === 'web') {
-			alert('Ох, функция поделиться не доступна на вашей платформе');
+			Alert.alert('Ох, функция поделиться не доступна на вашей платформе');
 			return;
 		}
 		if (selectedImage) {
@@ -23,7 +24,7 @@ const ShareScreen = ({ navigation }: Props) => {
 
 	const cancelShare = () => {
 		setSelectedImage(null);
-		navigation.navigate(Routs.home);
+		navigation.navigate(Routs.HOME);
 	}
 
 	return (
@@ -34,22 +35,15 @@ const ShareScreen = ({ navigation }: Props) => {
 					style={styles.thumbnail}
 				/>
 				<View style={styles.buttons}>
-					<TouchableOpacity
+					<Button 
 						onPress={openShareDialogAsunc}
-						style={styles.button}
-					>
-						<Text style={styles.buttonText}>
-							Поделиться
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
+						title='Поделиться'
+					/>
+					<Button
 						onPress={cancelShare}
-						style={styles.button}
-					>
-						<Text style={styles.buttonText}>
-							Отменить
-						</Text>
-					</TouchableOpacity>
+						title='Отменить'
+						color='grey'
+					/>
 				</View>
 			</View>
 		) : (
@@ -61,23 +55,13 @@ const ShareScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	buttons: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	button: {
-		backgroundColor: 'blue',
-		padding: 10,
-		borderRadius: 5,
-		marginHorizontal: 10
-	},
-	buttonText: {
-		fontSize: 20,
-		color: '#fff'
+		justifyContent: 'space-around',
+		width: '100%'
 	},
 	thumbnail: {
 		width: 300,

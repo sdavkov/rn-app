@@ -1,13 +1,14 @@
 import React, { FC, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Image, Alert, Button } from 'react-native';
+import {Text, View} from '../components/Themed';
 import * as ImagePicker from 'expo-image-picker';
 import logo from '../../assets/logo.png';
 import { ShareContext } from '../ShareContext';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import { Routs } from '../constants';
+import Routs from '../constants/constants';
 
-type Props = NativeStackScreenProps<ParamListBase, Routs.home>;
+type Props = NativeStackScreenProps<ParamListBase, typeof Routs.HOME>;
 
 const HomeScreen = ({ navigation }: Props) => {
 
@@ -17,7 +18,7 @@ const HomeScreen = ({ navigation }: Props) => {
 		const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
 		if (!permissionResult.granted) {
-			alert('Небходим доступ к камере')
+			Alert.alert('Небходим доступ к камере');
 			return;
 		}
 
@@ -28,7 +29,7 @@ const HomeScreen = ({ navigation }: Props) => {
 		}
 
 		setSelectedImage({ localUri: pickerResult.uri });
-		navigation.navigate(Routs.share);
+		navigation.navigate(Routs.SHARE);
 	}
 
 	return (
@@ -37,13 +38,11 @@ const HomeScreen = ({ navigation }: Props) => {
 				<Image source={logo} style={styles.logo}></Image>
 			</View>
 			<View style={styles.content}>
-				<Text style={styles.instructions}>Выбиритен фото, которым вы хотите поделиться с вашими друзьями.</Text>
-				<TouchableOpacity
+				<Text style={styles.instructions}>Выберите фото, которым вы хотите поделиться с вашими друзьями.</Text>
+				<Button
 					onPress={opentImagePickerAsync}
-					style={styles.button}
-				>
-					<Text style={styles.buttonText}>Выбирите фото</Text>
-				</TouchableOpacity>
+					title='Выбирите фото'
+				/>
 			</View>
 		</View>
 	)
@@ -52,7 +51,6 @@ const HomeScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
 		alignItems: 'center',
 	},
 	header: {
@@ -71,20 +69,10 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	instructions: {
-		color: '#888',
 		fontSize: 18,
 		marginHorizontal: 15,
 		marginVertical: 15
 	},
-	button: {
-		backgroundColor: 'blue',
-		padding: 10,
-		borderRadius: 5
-	},
-	buttonText: {
-		fontSize: 20,
-		color: '#fff'
-	}
 });
 
 export default HomeScreen
